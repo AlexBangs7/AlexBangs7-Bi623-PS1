@@ -44,16 +44,28 @@ def best_hit(species=str):
             if index == 0:
                 continue
             gene_info = line.strip('\n').split('\t')
-            gene_id = gene_info[0]
-            gene_name = gene_info[1]
-            protein_id = gene_info[2]
+            protein_id = gene_info[0]
+            gene_id = gene_info[1]
+            gene_name = gene_info[2]
             if protein_id not in gene_dict:
                 gene_dict[protein_id] = [gene_id,gene_name]
     return best_hit_dict, gene_dict
 
+species1_dict, species1_genes = best_hit(species1)
+species2_dict, species2_genes = best_hit(species2)
 
+# 1 Gene ID 1 Protein ID    1 Gene Name
+# 2 Gene ID 2 Protein ID    2 Gene Name
 with open(f'{species1}_{species2}.txt',"w") as output:
+    output.write('Species 1 Gene ID\tSpecies 1 Protein ID\tSpecies 1 Gene Name\tSpecies 2 Gene ID\tSpecies 2 Protein ID\tSpecies 2 Gene Name')
     for species1_hit, species2_hit in species1_dict.items():
         # print(species1_hit, species2_hit)
         if species2_hit in species2_dict and species2_dict[species2_hit] == species1_hit:
-            output.write(f'{species2_hit}\t{species1_hit}\n')
+
+            gene1_id = species1_genes[species1_hit][0]
+            gene1_name = species1_genes[species1_hit][1]
+
+            gene2_id = species2_genes[species2_hit][0]
+            gene2_name = species2_genes[species2_hit][1]
+
+            output.write(f'{gene1_id}\t{species1_hit}\t{gene1_name}\t{gene2_id}\t{species2_hit}\t{gene2_name}\n')
