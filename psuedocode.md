@@ -48,7 +48,10 @@ Remove all dictionary entries with identical flag == TRUE:
 
 # 2. Next, the script should determine which best hits share a 1:1 (species1:species2) reciprocal best hit. This is a smaller list/dictionary of only the proteins that are the best hit for both blast runs
 
-for key, value in species 1 dictionary:
-    if value[0] is in 
+For each species, make dictionary of Ensembl biomart data for gene ID, gene name, and protein ID (ENS_Human_genes_116.txt, or ENS_Zfish_genes_116.txt).
+
+for species1_hit, species2_hit in species1 dictionary:
+    if species2_hit is a key in species2 dictionary and the corresponding species2 dictionary value is species1_hit:
+        write the gene id, protein id, and gene name for species1_hit and species2_hit to output file
 
 ```
