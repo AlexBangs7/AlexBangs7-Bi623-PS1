@@ -14,10 +14,10 @@ species1 = args.s1
 species2 = args.s2
 
 
-def best_hit(species=str):
+def best_hit(species1=str, species2=str):
 
     # Iterate over sorted BLASTp results for species and make dictionary of best hits
-    with open(f"sorted-BLASTp-results/{species}_sorted.txt", "r") as file:
+    with open(f"/projects/bgmp/shared/Bi623/PS1/blasthits/{species1}_query_{species2}_db.txt", "r") as file:
         eval_dict = {} # key = query sequence ID, value = [subject sequence ID, e-value, duplicate-flag]
         for line in file:
             line = line.strip("\n").split()
@@ -39,7 +39,7 @@ def best_hit(species=str):
 
     # dictionary for identifying all protein IDs and their corresponding gene IDs
     gene_dict = {} # key = protein stable ID, value = [gene stable ID, gene name]
-    with open(f"/projects/bgmp/shared/Bi623/PS1/biomart/{species}_biomart_v116.txt", "r") as tbl:
+    with open(f"/projects/bgmp/shared/Bi623/PS1/biomart/{species1}_biomart_v116.txt", "r") as tbl:
         for index, line in enumerate(tbl):
             if index == 0:
                 continue
@@ -51,11 +51,11 @@ def best_hit(species=str):
                 gene_dict[protein_id] = [gene_id,gene_name]
     return best_hit_dict, gene_dict
 
-species1_dict, species1_genes = best_hit(species1)
-species2_dict, species2_genes = best_hit(species2)
+# Run best_hit for both species
+species1_dict, species1_genes = best_hit(species1, species2)
+species2_dict, species2_genes = best_hit(species2, species1)
 
-# 1 Gene ID 1 Protein ID    1 Gene Name
-# 2 Gene ID 2 Protein ID    2 Gene Name
+# Take results of best_hit and print reciprocal best hits to tsv file
 with open(f'{species1}_{species2}.txt',"w") as output:
     output.write('Species 1 Gene ID\tSpecies 1 Protein ID\tSpecies 1 Gene Name\tSpecies 2 Gene ID\tSpecies 2 Protein ID\tSpecies 2 Gene Name')
     for species1_hit, species2_hit in species1_dict.items():
@@ -64,7 +64,6 @@ with open(f'{species1}_{species2}.txt',"w") as output:
 
             gene1_id = species1_genes[species1_hit][0]
             gene1_name = species1_genes[species1_hit][1]
-
             gene2_id = species2_genes[species2_hit][0]
             gene2_name = species2_genes[species2_hit][1]
 
