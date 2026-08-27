@@ -54,4 +54,8 @@ for species1_hit, species2_hit in species1 dictionary:
     if species2_hit is a key in species2 dictionary and the corresponding species2 dictionary value is species1_hit:
         write the gene id, protein id, and gene name for species1_hit and species2_hit to output file
 
+# 3. Finally, the script should output a tab separated table of all proteins with reciprocal best hits. Formatting note: Species 1 Gene ID, Species 1 Protein ID, Species 1 Gene Name, Species 2 Gene ID, Species 2 Protein ID, Species 2 Gene Name Note: Your output file should have a HEADER line to explain each column
+
+If the gene does not have gene name available, write out an empty string for the gene name Example: ENSDARG500, ENSDARP500, shha, ENSEEG919, ENSEEP919, 
+
 ```
