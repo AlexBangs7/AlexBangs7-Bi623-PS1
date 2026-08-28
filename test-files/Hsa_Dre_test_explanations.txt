@@ -1,0 +1,19 @@
+# A. One hit in other file - keep
+ENSP00000000412	ENSDARP00000018076	48.679	265	125	7	14	277	11	265	4.87e-79	240
+# B. Multiple hits in other file, different e-values and different subject ids - keep
+ENSP00000002596	ENSDARP00000051585	55.957	277	115	2	37	306	26	302	7.00e-114	331
+# C. Multiple hits in other file, same e-value and same subject id - keep
+ENSP00000363827	ENSDARP00000141317	48.349	2846	1305	40	9	2810	13	2737	0.0	2615
+ENSP00000363827	ENSDARP00000141317	51.387	1586	719	14	2811	4389	1920	3460	0.0	1678
+# D. Multiple hits in other file, different e-values but same subject id - keep best
+ENSP00000493805	ENSDARP00000053266	83.598	189	31	0	1	189	1	189	3.27e-117	343
+# E. Hit but no gene name in biomart gene table - keep w/ empty string for gene name
+ENSP00000620545	ENSDARP00000064693	64.211	285	81	2	7	291	3	266	1.78e-134	381
+# F. Multiple hits in other file, same e-value but different subject ids - toss
+ENSP00000280696	ENSDARP00000000160	83.924	367	58	1	110	476	45	410	0.0	652
+# G. Multiple hits in other file, none of which are reciprocal - toss
+ENSP00000633391	ENSDARP00000140002	42.889	450	204	11	180	612	14	427	1.05e-112	344
+# H. Multiple hits in other file, reciprocal hit is not the best - toss
+ENSP00000329357	ENSDARP00000150009	38.418	708	329	21	52	719	35	675	2.12e-116	368
+# I. Multiple hits in other file, same e-value, some hits have same subject id while others have different - toss
+ENSP00000505517	ENSDARP00000120503	29.783	3324	1871	42	6	2893	4	3300	0.0	1557
