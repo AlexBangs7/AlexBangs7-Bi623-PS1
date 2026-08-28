@@ -56,8 +56,8 @@ species1_dict, species1_genes = best_hit(species1, species2)
 species2_dict, species2_genes = best_hit(species2, species1)
 
 # Take results of best_hit and print reciprocal best hits to tsv file
-with open(f'{species1}_{species2}.txt',"w") as output:
-    output.write('Species 1 Gene ID\tSpecies 1 Protein ID\tSpecies 1 Gene Name\tSpecies 2 Gene ID\tSpecies 2 Protein ID\tSpecies 2 Gene Name')
+with open(f'{species1}_{species2}_RBH.tsv',"w") as output:
+    output.write('Species 1 Gene ID\tSpecies 1 Protein ID\tSpecies 1 Gene Name\tSpecies 2 Gene ID\tSpecies 2 Protein ID\tSpecies 2 Gene Name\n')
     for species1_hit, species2_hit in species1_dict.items():
         # print(species1_hit, species2_hit)
         if species2_hit in species2_dict and species2_dict[species2_hit] == species1_hit:
@@ -67,4 +67,4 @@ with open(f'{species1}_{species2}.txt',"w") as output:
             gene2_id = species2_genes[species2_hit][0]
             gene2_name = species2_genes[species2_hit][1]
 
-            output.write(f'{gene1_id}\t{species1_hit}\t{gene1_name}\t{gene2_id}\t{species2_hit}\t{gene2_name}\n')
+            output.write(f'./Output-files/{gene1_id}\t{species1_hit}\t{gene1_name}\t{gene2_id}\t{species2_hit}\t{gene2_name}\n')
