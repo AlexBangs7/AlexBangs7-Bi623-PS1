@@ -1,0 +1,19 @@
+# Reciprocal best hit with no other reads - kept
+
+# Reciprocal best hit with other reads - kept
+
+# Multiple hits with same e-value and same subject id - kept
+
+# Multiple hits with different e-values but same subject id - kept best
+
+# Reciprocal best hit but no gene name in biomart gene table - kept w/ empty string for gene name
+
+
+# 1:2 Multiple hits with same e-value and different subject ids - tossed
+
+# Multiple hits, none of which are reciprocal - tossed
+
+# Multiple hits, reciprocal hit is not the best - tossed
+
+# Multiple hits with same e-value, some of which have 
+# the same subject id and some of which have different - tossed
