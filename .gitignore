@@ -7,6 +7,7 @@ Danio_rerio.BLASTp
 Homo_sapiens.BLASTp
 
 # Sorted Files
-Dre_sorted.txt
-Hsa_sorted.txt
+sorted-files/
 
+# Wesam's files for comparison
+output-files/wesam*
