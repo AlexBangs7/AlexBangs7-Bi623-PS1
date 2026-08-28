@@ -2,9 +2,8 @@
 .pixi/*
 !.pixi/config.toml
 
-# BLASTP files
-Danio_rerio.BLASTp
-Homo_sapiens.BLASTp
+# Rmd Instruction files
+ProblemSet1_template.Rmd
 
 # Sorted Files
 sorted-files/
