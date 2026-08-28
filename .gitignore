@@ -8,6 +8,7 @@ ProblemSet1_template.Rmd
 # Sorted Files
 sorted-files/
 
-# Wesam's files for comparison
+# Files for comparison to Wesam and Pen
 output-files/Wesam*
 output-files/Pen*
+output-files/Dre_Eel_RBH_rv.tsv
