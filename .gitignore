@@ -8,7 +8,8 @@ ProblemSet1_template.Rmd
 # Sorted Files
 sorted-files/
 
-# Files for comparison to Wesam and Pen
+# Files for peer comparison
 output-files/Wesam*
 output-files/Pen*
 output-files/Dre_Eel_RBH_rv.tsv
+test-files/peer-swap/
