@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+from pathlib import Path
 
 def get_args():
     parser=argparse.ArgumentParser()
@@ -12,8 +13,8 @@ def get_args():
     return parser.parse_args()
 args = get_args()
 
-species1 = args.s1
-species2 = args.s2
+species1 = args.species1
+species2 = args.species2
 swapPeer = args.swapPeer
 
 def best_hit(species1=str, species2=str):
@@ -25,7 +26,7 @@ def best_hit(species1=str, species2=str):
         BLASTp_file = open(f"/projects/bgmp/shared/Bi623/PS1/blasthits/{species1}_query_{species2}_db.txt", "r")
 
     # Iterate over sorted BLASTp results for species and make dictionary of best hits
-    eval_dict = {} # key = query sequence ID, value = [subject sequence ID, e-value, duplicate-flag]
+    eval_dict = {} # key = query sequence ID, value = [subject sequence ID, e-value, toss-flag]
     for line in BLASTp_file:
         if line.startswith("#"):
            continue # skip explanation lines in test files
@@ -73,14 +74,22 @@ species1_dict, species1_genes = best_hit(species1, species2)
 species2_dict, species2_genes = best_hit(species2, species1)
 
 # 3. Take results of best_hit and print reciprocal best hits to output tsv file
-if args.swapPeer:
-    output_file = open(f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/peer-swap/{swapPeer}_{species1}_{species2}_output_RBH.tsv", "w")
-elif args.test:
-    output_file = open(f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/{species1}_{species2}_output_RBH.tsv", "w")
-else:
-    output_file = open(f'/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/output-files/{species1}_{species2}_RBH_rv.tsv',"w")
+# 4. Count number of RBH for each species combination
 
-output_file.write(f'{species1} Gene ID\t{species1} Protein ID\t{species1} Gene Name\t{species2} Gene ID\t{species2} Protein ID\t{species2} Gene Name\n')
+RBH_count = 0
+
+if args.swapPeer:
+    RBH_output = open(f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/peer-swap/{swapPeer}_{species1}_{species2}_RBH.tsv", "w")
+    count_file = f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/peer-swap/{swapPeer}_RBH_count.tsv"
+
+elif args.test:
+    RBH_output = open(f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/{species1}_{species2}_RBH.tsv", "w")
+    count_file = f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/RBH_count.tsv"
+
+else:
+    RBH_output = open(f'/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/output-files/{species1}_{species2}_RBH.tsv',"w")
+    count_file = f'/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/output-files/RBH_count.tsv'
+RBH_output.write(f'{species1} Gene ID\t{species1} Protein ID\t{species1} Gene Name\t{species2} Gene ID\t{species2} Protein ID\t{species2} Gene Name\n')
 
 for species1_hit, species2_hit in species1_dict.items():
     if species2_hit in species2_dict and species2_dict[species2_hit] == species1_hit:
@@ -88,6 +97,16 @@ for species1_hit, species2_hit in species1_dict.items():
         #gene1_name = species1_genes[species1_hit][1]
         gene2_id, gene2_name = species2_genes[species2_hit][0:2]
         #gene2_name = species2_genes[species2_hit][1]
+        RBH_count += 1 
 
-        output_file.write(f'{species1_hit}\t{gene1_id}\t{gene1_name}\t{species2_hit}\t{gene2_id}\t{gene2_name}\n')
-output_file.close()
+
+        RBH_output.write(f'{species1_hit}\t{gene1_id}\t{gene1_name}\t{species2_hit}\t{gene2_id}\t{gene2_name}\n')
+RBH_output.close()
+
+if Path(count_file).exists(): # check if count_output file is empty, and if so write header
+    count_output = open(count_file,"a")
+    count_output.write(f"\n{species1}\t{species2}\t{RBH_count}")
+else:
+    count_output = open(count_file,"a")
+    count_output.write(f"Species 1\tSpecies 2\tRBH count")
+    count_output.write(f"\n{species1}\t{species2}\t{RBH_count}")
