@@ -99,11 +99,8 @@ RBH_output.write(f'{species1} Gene ID\t{species1} Protein ID\t{species1} Gene Na
 for species1_hit, species2_hit in species1_dict.items():
     if species2_hit in species2_dict and species2_dict[species2_hit] == species1_hit:
         gene1_id, gene1_name = species1_genes[species1_hit][0:2]
-        #gene1_name = species1_genes[species1_hit][1]
         gene2_id, gene2_name = species2_genes[species2_hit][0:2]
-        #gene2_name = species2_genes[species2_hit][1]
         RBH_count += 1 
-
 
         RBH_output.write(f'{gene1_id}\t{species1_hit}\t{gene1_name}\t{gene2_id}\t{species2_hit}\t{gene2_name}\n')
 RBH_output.close()
