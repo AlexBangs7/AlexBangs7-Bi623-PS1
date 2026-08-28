@@ -6,8 +6,7 @@ def get_args():
     parser=argparse.ArgumentParser()
     parser.add_argument("-s1", help="species1", required=True, choices=['Hsa','Dre','Eel','Pka'])
     parser.add_argument("-s2", help="species2", required=True, choices=['Hsa','Dre','Eel','Pka'])
-    parser.add_argument("--test", help="running on test files", required=False, choices=[True,False])
-
+    parser.add_argument("-t", help="running on test files", required=False)
     return parser.parse_args()
 args = get_args()
 
@@ -15,7 +14,7 @@ species1 = args.s1
 species2 = args.s2
 
 def best_hit(species1=str, species2=str):
-    if args.test == True:
+    if args.t:
         BLASTp_file = open(f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/{species1}_{species2}_test.txt", "r")
     else:
         BLASTp_file = open(f"/projects/bgmp/shared/Bi623/PS1/blasthits/{species1}_query_{species2}_db.txt", "r")
@@ -23,8 +22,8 @@ def best_hit(species1=str, species2=str):
     # Iterate over sorted BLASTp results for species and make dictionary of best hits
     eval_dict = {} # key = query sequence ID, value = [subject sequence ID, e-value, duplicate-flag]
     for line in BLASTp_file:
-        if line.startswith("#") or line == "":
-            continue # skip header lines in test files
+        if line.startswith("#"):
+           continue # skip explanation lines in test files
         line = line.strip("\n").split()
         queryID = line[0]
         subjectID = line[1]
@@ -66,8 +65,8 @@ species1_dict, species1_genes = best_hit(species1, species2)
 species2_dict, species2_genes = best_hit(species2, species1)
 
 # Take results of best_hit and print reciprocal best hits to output tsv file
-if args.test == True:
-    output_file = open(f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/{species1}_{species2}_test_output.txt", )
+if args.t:
+    output_file = open(f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/{species1}_{species2}_output_RBH.tsv", "w")
 else:
     output_file = open(f'/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/output-files/{species1}_{species2}_RBH.tsv',"w")
 
@@ -80,5 +79,5 @@ for species1_hit, species2_hit in species1_dict.items():
         gene2_id, gene2_name = species2_genes[species2_hit][0:2]
         #gene2_name = species2_genes[species2_hit][1]
 
-        output_file.write(f'./Output-files/{gene1_id}\t{species1_hit}\t{gene1_name}\t{gene2_id}\t{species2_hit}\t{gene2_name}\n')
+        output_file.write(f'{gene1_id}\t{species1_hit}\t{gene1_name}\t{gene2_id}\t{species2_hit}\t{gene2_name}\n')
 output_file.close()
