@@ -35,6 +35,8 @@ def best_hit(species1=str, species2=str):
         subjectID = line[1]
         evalue = float(line[10])
         if queryID in eval_dict:
+            if evalue < eval_dict[queryID][1]:
+                eval_dict[queryID][0:2] = [subjectID, evalue]
             if evalue == eval_dict[queryID][1] and subjectID != eval_dict[queryID][0]:
                 eval_dict[queryID][2] = True 
             else:
@@ -54,19 +56,19 @@ def best_hit(species1=str, species2=str):
 
     # dictionary for identifying all protein IDs and their corresponding gene IDs
     gene_dict = {} # key = protein stable ID, value = [gene stable ID, gene name]
-    if args.swapPeer:
-        gene_table_file = open(f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/peer-swap/{species1}_gene_table.txt", "r")
-    else:
-        gene_table_file = open(f"/projects/bgmp/shared/Bi623/PS1/biomart/{species1}_biomart_v116.txt", "r")
-        for index, line in enumerate(gene_table_file):
-            if index == 0:
-                continue
-            gene_info = line.strip('\n').split('\t')
-            protein_id = gene_info[0]
-            gene_id = gene_info[1]
-            gene_name = gene_info[2]
-            if protein_id not in gene_dict:
-                gene_dict[protein_id] = [gene_id,gene_name]
+    #if args.swapPeer:
+    #    gene_table_file = open(f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/peer-swap/{species1}_gene_table.txt", "r")
+    #else:
+    gene_table_file = open(f"/projects/bgmp/shared/Bi623/PS1/biomart/{species1}_biomart_v116.txt", "r")
+    for index, line in enumerate(gene_table_file):
+        if index == 0:
+            continue
+        gene_info = line.strip('\n').split('\t')
+        protein_id = gene_info[0]
+        gene_id = gene_info[1]
+        gene_name = gene_info[2]
+        if protein_id not in gene_dict:
+            gene_dict[protein_id] = [gene_id,gene_name]
     return best_hit_dict, gene_dict
 
 # Run best_hit for both species
@@ -78,8 +80,11 @@ species2_dict, species2_genes = best_hit(species2, species1)
 
 RBH_count = 0
 
+print(species1_dict)
+print(species2_dict)
+
 if args.swapPeer:
-    RBH_output = open(f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/peer-swap/{swapPeer}_{species1}_{species2}_RBH.tsv", "w")
+    RBH_output = open(f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/peer-swap/{swapPeer}_output.tsv", "w")
     count_file = f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/peer-swap/{swapPeer}_RBH_count.tsv"
 
 elif args.test:
@@ -100,13 +105,14 @@ for species1_hit, species2_hit in species1_dict.items():
         RBH_count += 1 
 
 
-        RBH_output.write(f'{species1_hit}\t{gene1_id}\t{gene1_name}\t{species2_hit}\t{gene2_id}\t{gene2_name}\n')
+        RBH_output.write(f'{gene1_id}\t{species1_hit}\t{gene1_name}\t{gene2_id}\t{species2_hit}\t{gene2_name}\n')
 RBH_output.close()
 
-if Path(count_file).exists(): # check if count_output file is empty, and if so write header
-    count_output = open(count_file,"a")
-    count_output.write(f"\n{species1}\t{species2}\t{RBH_count}")
-else:
-    count_output = open(count_file,"a")
-    count_output.write(f"Species 1\tSpecies 2\tRBH count")
-    count_output.write(f"\n{species1}\t{species2}\t{RBH_count}")
+if not args.swapPeer:
+    if Path(count_file).exists(): # check if count_output file is empty, and if so write header
+        count_output = open(count_file,"a")
+        count_output.write(f"\n{species1}\t{species2}\t{RBH_count}")
+    else:
+        count_output = open(count_file,"a")
+        count_output.write(f"Species 1\tSpecies 2\tRBH count")
+        count_output.write(f"\n{species1}\t{species2}\t{RBH_count}")
