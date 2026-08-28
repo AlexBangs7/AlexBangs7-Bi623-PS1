@@ -8,8 +8,8 @@
 #SBATCH --time=2-0:00:00
 
 # Human and Zebrafish
+sort -k1,1 -k11,11g /projects/bgmp/shared/Bi623/PS1/blasthits/Dre_query_Hsa_db.txt > sorted-files/Dre_Hsa_sorted.txt
 sort -k1,1 -k11,11g /projects/bgmp/shared/Bi623/PS1/blasthits/Hsa_query_Dre_db.txt > sorted-files/Hsa_Dre_sorted.txt
-sort -k1,1 -k11,11g /projects/bgmp/shared/Bi623/PS1/blasthits/Hsa_query_Eel_db.txt > sorted-files/Hsa_Eel_sorted.txt
 
 # Human and Eel
 sort -k1,1 -k11,11g /projects/bgmp/shared/Bi623/PS1/blasthits/Eel_query_Hsa_db.txt > sorted-files/Eel_Hsa_sorted.txt
