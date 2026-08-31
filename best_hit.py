@@ -80,9 +80,6 @@ species2_dict, species2_genes = best_hit(species2, species1)
 
 RBH_count = 0
 
-print(species1_dict)
-print(species2_dict)
-
 if args.swapPeer:
     RBH_output = open(f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/peer-swap/{swapPeer}_output.tsv", "w")
     count_file = f"/projects/bgmp/abangs/bioinfo/Bi623/PS/AlexBangs7-Bi623-PS1/test-files/peer-swap/{swapPeer}_RBH_count.tsv"

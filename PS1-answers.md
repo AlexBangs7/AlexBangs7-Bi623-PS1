@@ -1,6 +1,5 @@
 ## Part 5: Answer the below questions in PS1_answers.txt
 
-
 1.  How does the number of RBH’s vary across combinations?
     Any ideas why there is variance (biological or technical)?
 
